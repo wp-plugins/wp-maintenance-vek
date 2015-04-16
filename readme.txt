@@ -1,5 +1,6 @@
 ﻿=== Plugin Name ===
 Contributors: (veks)
+=== WP-Maintenance-vek ===
 Donate link: http://isvek.ru/donate
 Tags: Maintenance
 Requires at least: 4.1.1
