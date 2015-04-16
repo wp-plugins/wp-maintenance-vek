@@ -1,53 +1,55 @@
-﻿=== Plugin Name ===
+﻿=== WP Maintenance-vek ===
 Contributors: (veks)
-=== WP-Maintenance-vek ===
 Donate link: http://isvek.ru/donate
-Tags: Maintenance
+Tags: Maintenance,countdown timer,administration,login,customize page,
 Requires at least: 4.1.1
 Tested up to: 4.1.1
-Stable tag: 4.1.1
+Stable tag: 0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
+Include a maintenance update when your website
+
 == Description ==
-Плагин включает страницу техническое обслуживание с таймером обратного отсчета времени и c дополнительными настройкам.
-A few notes about the sections above:
+Plugin WP-Maintenance-vek allows administrators to close the site for technical obsluzhivanie.Plagin easily nastraivaetsya.Dopolnitelnye Plugin makes it awesome and free.
 
-*   "Contributors" is a comma separated list of wp.org/wp-plugins.org usernames
-*   "Tags" is a comma separated list of tags that apply to the plugin
-*   "Requires at least" is the lowest version that the plugin will work on
-*   "Tested up to" is the highest version that you've *successfully used to test the plugin*. Note that it might work on
-higher versions... this is just the highest one you've verified.
-*   Stable tag should indicate the Subversion "tag" of the latest stable version, or "trunk," if you use `/trunk/` for
-stable.
+<h3>The plugin includes</h3>
+<ul>
 
-    Note that the `readme.txt` of the stable tag is the one that is considered the defining one for the plugin, so
-if the `/trunk/readme.txt` file says that the stable tag is `4.3`, then it is `/tags/4.3/readme.txt` that'll be used
-for displaying information about the plugin.  In this situation, the only thing considered from the trunk `readme.txt`
-is the stable tag pointer.  Thus, if you develop in trunk, you can update the trunk `readme.txt` to reflect changes in
-your in-development version, without having that information incorrectly disclosed about the current stable version
-that lacks those changes -- as long as the trunk's `readme.txt` points to the correct stable tag.
+<li>Authorization form</li>
+<li>Feedback</li>
+<li>Adding Subscribers</li>
+<li>Subscriber csv export</li>
+<li>Cleaning subscribers csv</li>
+<li>
+Google analytics field</li>
+<li>Countdown timer</li>
+<li>Social networks</li>
+<li>Open site for roles</li>
+<li>Edit text</li>
+<li>Use css styles</li>
+<li>Progress bar</li>
+</ul>
 
-    If no stable tag is provided, it is assumed that trunk is stable, but you should specify "trunk" if that's where
-you put the stable version, in order to eliminate any doubt.
 
+
+
+<a href="http://isvek.ru/demo" target="_blank">View demo</a>
 == Installation ==
-1. Распакуйте плагин wp-maintenance-vek.zip в директорию `/wp-content/plugins/`
-2. Активировать плагин через `Меню` -> `Плагины` -> `wp-maintenance-vek` -> Активировать
+
+1.Upload the «WP-Maintenance-vek» folder to the /wp-content/plugins/ directory
+2.Activate the plugin through the 'Plugins' menu in WordPress
+3.Go to WP-Maintenance-vek
 
 == Frequently Asked Questions ==
 
-=Все ли работает?=
-Работает все
+= no questions =
 
 == Screenshots ==
-1. Test.`/assets/screenshot-1.png`
+
+1.Wp-Maintenance-vek options page
 
 == Changelog ==
 
 = 0.1 =
-* Stable version
-
-== Upgrade Notice ==
-= 0.1 =
-* Stable version
+* In the current version there is no change.
