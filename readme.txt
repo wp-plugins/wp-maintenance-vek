@@ -12,7 +12,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Плагин включает страницу техническое обслуживание с таймером обратного отсчета времени и c дополнительными настройкам.
 
 == Installation ==
-1. Загрузить плагин wp-maintenance-vek.zip в директорию `/wp-content/plugins/`
+1. Распакуйте плагин wp-maintenance-vek.zip в директорию `/wp-content/plugins/`
 2. Активировать плагин через `Меню` -> `Плагины` -> `wp-maintenance-vek` -> Активировать
 
 == Frequently Asked Questions ==
@@ -20,17 +20,14 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 =Все ли работает?=
 Работает все
 
-=Подерживаются все браузеры?=
-Практически все
-
 == Screenshots ==
-1. /screen/screenshot-1.png
+1. Test.`/assets/screenshot-1.png`
 
 == Changelog ==
 
 = 0.1 =
-* beta version
+* Stable version
 
 == Upgrade Notice ==
 = 0.1 =
-* beta version
+* Stable version
