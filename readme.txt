@@ -12,7 +12,6 @@ Activate the plugin WP Maintenance-vek when your site is under repair
 
 == Description ==
 Plugin WP Maintenance-vek allows administrators to close the site for maintenance. The plugin is easily configurable, easy to use.
-
 <h3>The plugin includes</h3>
 <ul>
 <li>Authorization form</li>
