@@ -58,4 +58,4 @@ Plugin WP Maintenance-vek allows administrators to close the site for maintenanc
 * Structural change
 * Small changes
 = 0.1 =
-* In the current version there is no change.
+* First Release
