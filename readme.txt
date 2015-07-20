@@ -38,7 +38,7 @@ Plugin WP Maintenance-vek allows administrators to close the site for maintenanc
 == Installation ==
 
 <ul>
-<li>1.Upload the «WP Maintenance-vek» folder to the /wp-content/plugins/ directory</li>
+<li>1.Upload the «WP Maintenance-vek» folder to the /wp-content/plugins/</li>
 <li>2.Activate the plugin through the 'Plugins' menu in WordPress</li>
 <li>3.Go to WP-Maintenance-vek</li>
 </ul>
