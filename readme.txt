@@ -49,7 +49,8 @@ Plugin WP Maintenance-vek allows administrators to close the site for maintenanc
 
 == Screenshots ==
 
-1. Admin panel `/assets/screenshot-1.png`.
+1. Screenshots View demo   `/assets/View_demo.png`.
+2. Screenshots Admin panel `/assets/Admin_panel.png`.
 
 == Changelog ==
 = 0.2 =
