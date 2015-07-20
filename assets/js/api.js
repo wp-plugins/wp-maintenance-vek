@@ -1,12 +1,12 @@
 /*!
- * wp_Maintenance_vek clock v0.1 (http://isvek.ru)
+ * WP_Maintenance_vek Countdown Timer v0.2 (http://isvek.ru/wp-maintenance-vek)
  * Copyright 2015 isvek.ru
- * Licensed /
  */
-jQuery(document).ready(function($){
-    var date_end = new Date(vek_veks.times_v).getTime();
+
+jQuery(document).ready(function($) {
+    var date_end = new Date(countdowntimer.date_timer).getTime();
     var days,hours,minutes,seconds;
-    var timer = document.getElementById('timer_end');
+    var timer = document.getElementById('timer');
 
     setInterval(function () {
         var current_date = new Date().getTime();
@@ -22,76 +22,77 @@ jQuery(document).ready(function($){
         var days_names = String(days);
         var days_names = days_names.charAt(days_names.length-1);
         var days_names = parseInt(days_names, 10);
-        if(days_names == 1){ var _days = "День";}
-        else if((days_names > 1) && (days_names < 5)){ var _days = "Дня";}
-        else{ var _days = "Дней";}
+        if(days_names == 1){ var _days = countdowntimer.langtimeD;}
+        else if((days_names > 1) && (days_names < 5)){ var _days = countdowntimer.langtimeD1;}
+        else{ var _days = countdowntimer.langtimeD2;}
 
         var hours_names = String(hours);
         var hours_names = hours_names.charAt(hours_names.length-1);
         var hours_names = parseInt(hours_names, 10);
-        if(hours_names == 1){ var _hours = "Час";}
-        else if((hours_names > 1) && (hours_names < 5)){ var _hours = "Часа";}
-        else{ var _hours = "Часов";}
+        if(hours_names == 1){ var _hours = countdowntimer.langtimeH;}
+        else if((hours_names > 1) && (hours_names < 5)){ var _hours = countdowntimer.langtimeH1;}
+        else{ var _hours = countdowntimer.langtimeH2;}
 
         var minutes_names = String(minutes);
         var minutes_names = minutes_names.charAt(minutes_names.length-1);
         var minutes_names = parseInt(minutes_names, 10);
-        if(minutes_names == 1){ var _minutes = "Минута";}
-        else if((minutes_names > 1) && (minutes_names < 5)){ var _minutes = "Минуты";}
-        else{ var _minutes = "Минут";}
+        if(minutes_names == 1){ var _minutes = countdowntimer.langtimeM;}
+        else if((minutes_names > 1) && (minutes_names < 5)){ var _minutes = countdowntimer.langtimeM1;}
+        else{ var _minutes = countdowntimer.langtimeM2;}
 
         var seconds_names = String(seconds);
         var seconds_names = seconds_names.charAt(seconds_names.length-1);
         var seconds_names = parseInt(seconds_names, 10);
-        if(seconds_names == 1){ var _seconds = "Секунда";}
-        else if((seconds_names > 1) && (seconds_names < 5)){ var _seconds = "Секунды";}
-        else{ var _seconds = "Секунд";}
+        if(seconds_names == 1){ var _seconds = countdowntimer.langtimeS;}
+        else if((seconds_names > 1) && (seconds_names < 5)){ var _seconds = countdowntimer.langtimeS1;}
+        else{ var _seconds = countdowntimer.langtimeS2;}
 
         function deg(deg){
             return (Math.PI/180)*deg - (Math.PI/180)*90
         }
-        var setting = {
-            days_css : {
-                internal_BG        : '#E0E0E0',  //Внешняя заливка
-                internal_lineWidth : 2,          //max 10px
-                outside_BG         : '#4CDC7C',  //Внутренняя заливка
-                outside_lineWidth  : 6,          //max 10px
-                shadowColor        : '#A6A19F',
-                shadowBlur         : 0,
-                onestrokeStyle     : '',
-                onestrokelineWidth : 0
-            },
-            hours_css : {
-                internal_BG        : '#E0E0E0',  //Внешняя заливка
-                internal_lineWidth : 2,          //max 10px
-                outside_BG         : '#4CDC7C',  //Внутренняя заливка
-                outside_lineWidth  : 6,          //max 10px
-                shadowColor        : '#A6A19F',
-                shadowBlur         : 0,
-                onestrokeStyle     : '',
-                onestrokelineWidth : 0
-            },
-            minutes_css : {
-                internal_BG        : '#E0E0E0',  //Внешняя заливка
-                internal_lineWidth : 2,          //max 10px
-                outside_BG         : '#4CDC7C',  //Внутренняя заливка
-                outside_lineWidth  : 6,          //max 10px
-                shadowColor        : '#A6A19F',
-                shadowBlur         : 0,
-                onestrokeStyle     : '',
-                onestrokelineWidth : 0
-            },
-            seconds_css : {
-                internal_BG        : '#E0E0E0',  //Внешняя заливка
-                internal_lineWidth : 2,          //max 10px
-                outside_BG         : '#E6E6E6',  //Внутренняя заливка
-                outside_lineWidth  : 6,          //max 10px
-                shadowColor        : '#A6A19F',
-                shadowBlur         : 0,
-                onestrokeStyle     : '',
-                onestrokelineWidth : 0
-            }
-        };
+
+            var setting = {
+                days_css : {
+                    internal_BG        : 'rgba(255,255,255, 0.10)',
+                    internal_lineWidth : 2,
+                    outside_BG         : 'rgba(255,255,255, 0.9)',
+                    outside_lineWidth  : 8,
+                    shadowColor        : 'rgba(0,0,0, 0.36)',
+                    shadowBlur         : 2,
+                    onestrokeStyle     : 'rgba(0,0,0, 0.36)',
+                    onestrokelineWidth : 2
+                },
+                hours_css : {
+                    internal_BG        : 'rgba(255,255,255, 0.10)',
+                    internal_lineWidth : 2,
+                    outside_BG         : 'rgba(255,255,255, 0.9)',
+                    outside_lineWidth  : 8,
+                    shadowColor        : 'rgba(0,0,0, 0.36)',
+                    shadowBlur         : 2,
+                    onestrokeStyle     : 'rgba(0,0,0, 0.36)',
+                    onestrokelineWidth : 2
+                },
+                minutes_css : {
+                    internal_BG        : 'rgba(255,255,255, 0.10)',
+                    internal_lineWidth : 2,
+                    outside_BG         : 'rgba(255,255,255, 0.9)',
+                    outside_lineWidth  : 8,
+                    shadowColor        : 'rgba(0,0,0, 0.36)',
+                    shadowBlur         : 2,
+                    onestrokeStyle     : 'rgba(0,0,0, 0.36)',
+                    onestrokelineWidth : 2
+                },
+                seconds_css : {
+                    internal_BG        : 'rgba(255,255,255, 0.10)',
+                    internal_lineWidth : 2,
+                    outside_BG         : 'rgba(255,255,255, 0.9)',
+                    outside_lineWidth  : 8,
+                    shadowColor        : 'rgba(0,0,0, 0.36)',
+                    shadowBlur         : 2,
+                    onestrokeStyle     : 'rgba(0,0,0, 0.36)',
+                    onestrokelineWidth : 2
+                }
+            };
         //Круги в canvas
         var clock = {
             set: {
@@ -105,8 +106,15 @@ jQuery(document).ready(function($){
                     ctx.lineWidth = setting.days_css.internal_lineWidth;
                     ctx.strokeStyle = setting.days_css.internal_BG;
                     ctx.lineCap = "round";
-                    //ctx.fillStyle = "rgba(255,255,255, 0.10";
-                    // ctx.fill("evenodd");
+                    ctx.font="50px 'Roboto Mono', Roboto, sans-serif";
+                    ctx.textAlign="center";
+                    ctx.fillStyle="white";
+                    ctx.fillText(days,75,92);
+                    ctx.font="400 11px 'Roboto Mono', Roboto, sans-serif";
+                    ctx.textAlign="center";
+                    ctx.fillText(_days,75,110);
+                    ctx.fillStyle = "rgba(255,255,255, 0.10)";
+                    ctx.fill("evenodd");
                     ctx.stroke();
 
                     ctx.beginPath();
@@ -114,6 +122,7 @@ jQuery(document).ready(function($){
                     ctx.lineWidth = setting.days_css.onestrokelineWidth;
                     ctx.strokeStyle = setting.days_css.onestrokeStyle;
                     ctx.lineCap = "round";
+
                     ctx.stroke();
 
                     ctx.beginPath();
@@ -142,8 +151,15 @@ jQuery(document).ready(function($){
                     ctx.lineWidth = setting.hours_css.internal_lineWidth;
                     ctx.strokeStyle = setting.hours_css.internal_BG;
                     ctx.lineCap = "round";
-                    //ctx.fillStyle = "rgba(255,255,255, 0.10)";
-                    // ctx.fill("evenodd");
+                    ctx.font="50px 'Roboto Mono', Roboto, sans-serif";
+                    ctx.textAlign="center";
+                    ctx.fillStyle="white";
+                    ctx.fillText(hours,75,92);
+                    ctx.font="400 11px 'Roboto Mono', Roboto, sans-serif";
+                    ctx.textAlign="center";
+                    ctx.fillText(_hours,75,110);
+                    ctx.fillStyle = "rgba(255,255,255, 0.10)";
+                    ctx.fill("evenodd");
                     ctx.stroke();
 
                     ctx.beginPath();
@@ -175,8 +191,15 @@ jQuery(document).ready(function($){
                     ctx.lineWidth = setting.minutes_css.internal_lineWidth;
                     ctx.strokeStyle = setting.minutes_css.internal_BG;
                     ctx.lineCap = "round";
-                    //ctx.fillStyle = "rgba(255,255,255, 0.10)";
-                    // ctx.fill("evenodd");
+                    ctx.font="50px 'Roboto Mono', Roboto, sans-serif";
+                    ctx.textAlign="center";
+                    ctx.fillStyle="white";
+                    ctx.fillText(minutes,75,92);
+                    ctx.font="400 11px 'Roboto Mono', Roboto, sans-serif";
+                    ctx.textAlign="center";
+                    ctx.fillText(_minutes,75,110);
+                    ctx.fillStyle = "rgba(255,255,255, 0.10)";
+                    ctx.fill("evenodd");
                     ctx.stroke();
 
                     ctx.beginPath();
@@ -210,14 +233,15 @@ jQuery(document).ready(function($){
                     ctx.lineWidth = setting.seconds_css.internal_lineWidth;
                     ctx.strokeStyle = setting.seconds_css.internal_BG; //setting.seconds_css.internal_BG
                     ctx.lineCap = "round";
-                    //ctx.font="50px Trebuchet MS, Arial, Helvetica, sans-serif";
-                    //ctx.textAlign="center";
-                    //ctx.fillText(seconds,75,92);
-                    //ctx.font="11px Verdana";
-                    //ctx.textAlign="center";
-                    //ctx.fillText(_seconds,75,110);
-                    //ctx.fillStyle = "rgba(255,255,255, 0.10)";
-                    // ctx.fill("evenodd");
+                    ctx.font="50px 'Roboto Mono', Roboto, sans-serif";
+                    ctx.textAlign="center";
+                    ctx.fillStyle="white";
+                    ctx.fillText(seconds,75,92);
+                    ctx.font="400 11px 'Roboto Mono', Roboto, sans-serif";
+                    ctx.textAlign="center";
+                    ctx.fillText(_seconds,75,110);
+                    ctx.fillStyle = "rgba(255,255,255, 0.10)";
+                    ctx.fill("evenodd");
                     ctx.stroke();
 
                     ctx.beginPath();
@@ -237,36 +261,30 @@ jQuery(document).ready(function($){
                     ctx.shadowOffsetX = 0;
                     ctx.shadowOffsetY = 0;
                     ctx.shadowColor   = setting.seconds_css.shadowColor;
+                    //var dataURL =  cSec.toDataURL('image/png');
+                    //$('vek').html(dataURL);
                 }
             }
         };
 
-        if(seconds_left>=0){
-            $('.timers').show();
-            $('.type_days').text(_days);        // Название день,дня,дней
-            $('.val_days').text(days);          // Вывод дня
-
-            $('.type_hours').text(_hours);      // Название час,чоса,часов
-            $('.val_hours').text(hours);        // Вывод час
-
-            $('.type_minutes').text(_minutes);  // Название минута,минуты,минут
-            $('.val_minutes').text(minutes);    // Вывод минут
-
-            $('.type_seconds').text(_seconds);  // Название секунда,секунды,секунд
-            $('.val_seconds').text(seconds);    // Вывод секунд
+        if(seconds_left >= 0){
             // Выводим круги
-            if(seconds == 0)
-                $('#canvas_seconds').addClass('flipInY animated');
-
-            clock.set.seconds();
-            clock.set.minutes();
-            clock.set.hours();
             clock.set.days();
+            clock.set.hours();
+            clock.set.minutes();
+            clock.set.seconds();
+            if(seconds < 1) {
+                $('#canvas_seconds').addClass('flipInY animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
+                    $(this).removeClass('flipInY' + ' animated');
+                });
+            }
+            $('.ttv').html(minutes);
+
         }else{
             //Скрывает все круги
             $('.timers').addClass('fadeOutUp animated').hide();
-            $('#timer_end').addClass('fadeIn animated');
-            timer.innerHTML = vek_veks.end_text; //Выводим сообщение время вышло
+            $('#timer_end').addClass('animated fadeIn');
+            timer.innerHTML = countdowntimer.end_text; //Выводим сообщение время вышло
             }
     },10);
 });
