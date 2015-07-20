@@ -1,54 +1,45 @@
 <?php
 /**
- * WP Maintenance vek
- * Plugin Name: WP Maintenance vek
- * Plugin URI: http://isvek.ru
- * Description: Плагин включает страницу техническое обслуживание с таймером обратного отсчета времени и c дополнительными настройкам.
- * Version: 0.1
+ * WP Maintenance-vek
+ * Plugin Name: WP Maintenance-vek
+ * Plugin URI: http://isvek.ru/plug-ins/wp-maintenance-vek/
+ * Description: The plug includes a maintenance page with a countdown timer and c Advanced Settings.
+ * Version: 0.2
  * Author: Vek
  * Author URI: http://isvek.ru/vek
  * License: GPL-2.0+
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
  */
 
-define('PLUGIN_DIR',plugin_dir_path(__FILE__));
-define('PLUGIN_URL',plugin_dir_url(__FILE__));
-define('URL_CSS',PLUGIN_URL.'assets/css/');
-define('URL_JS',PLUGIN_URL.'assets/js/');
-define('URL_IMG',PLUGIN_URL.'assets/img/');
-define('URL_ADMIN',PLUGIN_DIR.'includes/');
-define('URL_VIEWS',PLUGIN_DIR.'views/');
-define('CSV',PLUGIN_DIR.'assets/csv/');
-
 class WP_Maintenance_vek{
 
-	public $wp_plugin_name = 'Maintenance_vek';
-	public $wp_plugin_url= 'http://isvek.ru/WP-Maintenance-vek';
+	public $wp_plugin_name = 'WP Maintenance-vek';
+	public $wp_plugin_url= 'http://isvek.ru/plug-ins/wp-maintenance-vek/';
     public $wp_plugin_author = 'vek';
-    public $wp_plugin_version = '0.1';
-    public $ver = '0.1';
+    public $wp_plugin_version = '0.2';
+    public $ver = '0.2';
     public $option;
 
 	public function __construct(){
 		$this->option = get_option('db_vek');
 
-        //Подключение меню
+        add_action('plugins_loaded',array(&$this,'constants'),       1);
+        add_action('plugins_loaded',array($this,'langss'),           2);
 		add_action('admin_menu',array(&$this,'add_plugin_menu'));
-        add_action('init',array($this,'wp_vek_logout'));
 
         //Подключение ajax формы сохранения и сброса настроек
 		add_action('wp_ajax_Wp_save_update',array($this,'update_db'));//Сохраняет настройки
 		add_action('wp_ajax_Wp_default_reset',array($this,'resets_db'));//Сбрасывает настройки
-
         add_action('wp_ajax_Wp_subscriber_email_csv',array($this,'subscriber_email_csv'));
         add_action('wp_ajax_Wp_subscriber_email_csv_del',array($this,'subscriber_email_csv_del'));
 
         //Включаем или выключаем страницу технического обслуживания
 		if($this->option["on"]=='1'){
-            add_action('init',array($this,'view_html'));
+            add_action('plugins_loaded',array($this,'wp_vek_logout'), 3);
+            add_action('plugins_loaded',array($this,'view_html'),     4);
 
-            add_action('wp_ajax_login_form',array($this,'login_form'));
-            add_action('wp_ajax_nopriv_login_form',array($this,'login_form'));
+            add_action('wp_ajax_login',array($this,'login'));
+            add_action('wp_ajax_nopriv_login',array($this,'login'));
 
             add_action('wp_ajax_mail_form',array($this,'mail_form'));
             add_action('wp_ajax_nopriv_mail_form',array($this,'mail_form'));
@@ -58,6 +49,24 @@ class WP_Maintenance_vek{
         }
 	}
 
+    public function constants(){
+        define('PLUGIN_DIR',plugin_dir_path(__FILE__));
+        define('PLUGIN_URL',plugin_dir_url(__FILE__));
+        define('URL_CSS',PLUGIN_URL.'assets/css/');
+        define('URL_JS',PLUGIN_URL.'assets/js/');
+        define('URL_IMG',PLUGIN_URL.'assets/img/');
+        define('URL_ADMIN',PLUGIN_DIR.'includes/');
+    }
+
+    /**
+     * Lang
+     * @author vek
+     * @since 0.2
+     */
+    public function langss() {
+        load_plugin_textdomain( 'lang', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+    }
+
     /**
      * Подключение css стилей
      * @author vek
@@ -66,12 +75,6 @@ class WP_Maintenance_vek{
 	public function admin_styles(){
         wp_register_style('bootstrap',URL_CSS.'bootstrap.min.css');
         wp_enqueue_style('bootstrap');
-
-        wp_register_style('ion.rangeSlidercss',URL_CSS.'ion.rangeSlider/css/ion.rangeSlider.css');
-        wp_enqueue_style('ion.rangeSlidercss');
-
-        wp_register_style('ion.rangeSlidercssskinNice',URL_CSS.'ion.rangeSlider/css/ion.rangeSlider.skinNice.css');
-        wp_enqueue_style('ion.rangeSlidercssskinNice');
 
         wp_register_style('font-awesome.css',URL_CSS.'font-awesome.css');
         wp_enqueue_style('font-awesome.css');
@@ -138,7 +141,7 @@ class WP_Maintenance_vek{
             $admin_menu = add_menu_page(
                 $this->wp_plugin_name,     //заголовок страницы
                 $this->wp_plugin_name,     //название пункта меню
-                'administrator',                         //уровень доступа пользователя
+                'administrator',              //уровень доступа пользователя administrator
                 'vek',                     //url страници
                 array (&$this, 'page_setting')
             );
@@ -161,6 +164,7 @@ class WP_Maintenance_vek{
                     $this->option['on']                 = esc_attr($_POST['on']);
                     $this->option['date_on_off']        = esc_attr($_POST['date_on_off']);
                     $this->option['mail_on_off']        = esc_attr($_POST['mail_on_off']);
+                    $this->option['subscriber_on_off']  = esc_attr($_POST['subscriber_on_off']);
                     $this->option['text_title']         = esc_attr($_POST['text_title']);
                     $this->option['title_page']         = esc_attr($_POST['title_page']);
                     $this->option['editpost']           = wp_kses_post($_POST['editpost']);
@@ -180,13 +184,12 @@ class WP_Maintenance_vek{
                         $this->option['roles'][$names]  = esc_attr($_POST['roles_' . $names . '']);
                     }
                     update_option('db_vek', $this->option);
-                    echo json_encode(array('mess'=>'<div class="alert alert-success" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span> Настройки сохранены</div>'));
-                    die();
+                    $mess = array('mess'=>__('<div class="alert alert-success" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span> Настройки сохранены.</div>','lang'));
                 }
             }else{
-                echo json_encode(array('mess'=>'<div class="alert alert-danger" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Настройки не сохранены</div>'));
-                die();
+                $mess = array('mess'=>__('<div class="alert alert-danger" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Настройки не сохранены.</div>','lang'));
             }
+            wp_send_json($mess);
         }
     }
 
@@ -198,21 +201,19 @@ class WP_Maintenance_vek{
 	public function default_db(){
 		$default = array(
         'on'                  => '0',
-        'mail_on_off'         => '0',
-        'date_on_off'         => '0',
-		'text_title'          => 'Заголовок страници',
-		'title_page'          => 'Название страници',
-		'editpost'            => 'Технические Работы',
+		'text_title'          => __('Заголовок проекта','lang'),
+		'title_page'          => __('Название проекта','lang'),
+		'editpost'            => __('В настоящее время мы работаем над сайтом.','lang'),
 		'date'                => current_time('mysql'),
         'name_animated'       => array('bounceInDown','bounceIn','flipInX','flipInY','zoomInUp'),
-        'default_animated'    => 'bounceInDown',
+        'default_animated'    => 'flipInY',
 		'copy'                => 'isvek.ru',
 		'Rang'                => '0',
-		'style'               => array('default'),
-		'style_default'       => 'default',
+		'style'               => array('pink','indigo','blue','teal','green','lime','amber','blue-grey'),
+		'style_default'       => 'blue-grey',
         'cvs'                 => array(),
 		'google_analytics'    => '',
-		'time_end'            => 'Время вышло',
+		'time_end'            => __('Время вышло','lang'),
 		'roles'               => array(),
 		'soc'                 => array('facebook'     => '',
 		                               'google'       => '',
@@ -234,13 +235,12 @@ class WP_Maintenance_vek{
                     $db_subscriber = array('subscriber_email'=>array());
                     update_option('db_vek_subscriber_email',$db_subscriber);
                     update_option('db_vek', $this->default_db());
-                    echo json_encode('<div class="alert alert-info"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span> Настройки сброшены</div>');
-                    die();
+                    $mess = __('<div class="alert alert-info"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span> Настройки сброшены.</div>','lang');
                 }
             }else{
-                echo json_encode('<div class="alert alert-danger" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Настройки не сброшены</div>');
-                die();
+                $mess = __('<div class="alert alert-danger" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Настройки не сброшены.</div>','lang');
             }
+            wp_send_json($mess);
         }
 	}
 
@@ -258,8 +258,8 @@ class WP_Maintenance_vek{
         if ((!current_user_can('administrator') && empty($roles[$current_user_role])) && !strstr($_SERVER['PHP_SELF'], 'wp-admin/admin-ajax.php') || !is_user_logged_in() && !strstr($_SERVER['PHP_SELF'], 'wp-admin/admin-ajax.php')){
             ob_start();
             header("Content-Type: text/html; charset=utf-8");
-            if(file_exists(URL_VIEWS.'gl.php')) {
-                require_once(URL_VIEWS."gl.php");
+            if(file_exists(URL_ADMIN.'home.php')) {
+                require_once(URL_ADMIN."home.php");
             }
             ob_flush();
             die();
@@ -283,24 +283,24 @@ class WP_Maintenance_vek{
                 if (!$name or !is_email($email) or !$message) {
                     if (!$name){
                         $name = true;
-                        $name_names = ' [Имя] ';
+                        $name_names = __(' Имя ','lang');
                     }else{
                         $name = false;
                     }
                     if (!is_email($email)){
                         $email = true;
-                        $name_names .= ' [email] ';
+                        $name_names .= ' E-mail ';
                     }else{
                         $email = false;
                     }
                     if (!$message){
                         $message = true;
-                        $name_names .= ' [message] ';
+                        $name_names .= __(' Cообщение ','lang');
                     }else{
                         $message = false;
                     }
                     $error[] = false;
-                    $mess = array('loggedin' => false,'message'=>__('Заполните поле : '.$name_names.' '),'meeserror'=> array('name_mail' =>$name,'email_mail' => $email,'message_mail' => $message));
+                    $mess = array('loggedin' => false,'message'=>__("Заполните поле : ","lang").$name_names.'.','meeserror'=> array('name_mail' =>$name,'email_mail' => $email,'message_mail' => $message));
                     wp_send_json($mess);
                 }
                 if(!empty($error)){
@@ -341,27 +341,27 @@ class WP_Maintenance_vek{
      * @author vek
      * @since 0.1
      */
-    public function login_form(){
+    public function login(){
         if(isset($_POST['action'])){
             if(!is_user_logged_in()){
                 if (empty($_POST) || !wp_verify_nonce($_POST['vekltd_vekltd'],'vekltd_vekltd')){
-                    $mess = array('loggedin'=>false, 'message'=>__('Ошибка Формы!'));
+                    $mess = array('loggedin'=>false, 'message'=>__('Ошибка формы авторизации.','lang'));
                 }else{
                     if(!is_user_logged_in()){
-                        $aut = array();
-                        $aut['user_login'] = esc_attr($_POST['login']);
-                        $aut['user_password'] = esc_attr($_POST['password']);
-                        $aut['remember'] = true;
-                        $aut_signon = wp_signon($aut, false);
-                        if (is_wp_error($aut_signon)) {
-                            $mess = array('loggedin' => false, 'message' => __('Ошибка, Логин | Пароль'));
+                        $login = array();
+                        $login['user_login'] = esc_attr($_POST['login']);
+                        $login['user_password'] = esc_attr($_POST['password']);
+                        $login['remember'] = esc_attr($_POST['remember']);
+                        $login_signon = wp_signon($login, false);
+                        if (is_wp_error($login_signon)) {
+                            $mess = array('loggedin' => false, 'message' => __('Неверное имя пользователя или пароль.','lang'));
                         } else {
-                            $mess = array('loggedin' => true, 'message' => __('Успешно'));
+                            $mess = array('loggedin' => true, 'message' => __('Успешно','lang'));
                         }
                     }
                 }
             }else{
-                $mess = array('loggedin' => true, 'message' => __('Успешно'));
+                $mess = array('loggedin' => true, 'message' => __('Успешно','lang'));
             }
             wp_send_json($mess);
         }
@@ -380,22 +380,22 @@ class WP_Maintenance_vek{
                 $subscriber_email = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM {$wpdb->prefix}db_vek_subscriber_email", OBJECT));
                 if ($subscriber_email > 0) {
                     if ($subscriber_email > 0) {
-                        $mess = sprintf(_n($subscriber_email . ' Подписчик', '%s Подписчик', $subscriber_email), $subscriber_email);
+                        $mess = $subscriber_email.' '.__('Подписчик','lang');
                     }
                     if ($subscriber_email > 1) {
-                        $mess = sprintf(_n($subscriber_email . ' Подписчикa', '%s Подписчикa', $subscriber_email), $subscriber_email);
+                        $mess = $subscriber_email.' '.__('Подписчикa','lang');
                     }
                     if ($subscriber_email > 4) {
-                        $mess = sprintf(_n($subscriber_email . ' Подписчиков', '%s Подписчиков', $subscriber_email), $subscriber_email);
+                        $mess = $subscriber_email.' '.__('Подписчиков','lang');
                     }
                     echo $mess;
-                    echo ' <a href="javascript:void(0);" id="csv" class="btn btn-warning btn-sm"> Экспорт в CSV</a> ';
-                    echo ' <a id="del_csv" class="btn btn-danger btn-sm"> Удалить всех подписчиков</a> ';
+                    echo ' <a href="javascript:void(0);" id="csv" class="btn btn-warning btn-sm"> '.__('Экспорт в CSV','lang').'</a> ';
+                    echo ' <a id="del_csv" class="btn btn-danger btn-sm">'.__('Удалить всех подписчиков','lang').'</a> ';
                 } else {
-                    echo '0 Подписчиков';
+                    echo $mess = $subscriber_email.' '.__('Подписчиков','lang');;
                 }
             } else {
-                echo "Таблица <b>{$wpdb->prefix}db_vek_subscriber_email</b> в базе данных не существует попробуйте Деактивировать плагин, а затем Активировать.";
+                _e('Таблица db_vek_subscriber_email в базе данных не существует попробуйте, Деактивировать плагин, а затем Активировать.','lang');
             }
         }
     }
@@ -409,28 +409,28 @@ class WP_Maintenance_vek{
         global $wpdb;
         if(isset($_POST['action'])){
             if(!isset($_POST['subscriber_email']) || !wp_verify_nonce($_POST['subscriber_email'],'subscriber_email')){
-                $mess = array('mess' => 'Ошибка формы ["subscriber_email"]','success'=> false);
+                $mess = array('mess' => __('Ошибка формы ["subscriber_email"]','lang'),'success'=> false);
             }else{
                 $db_mails=$wpdb->get_var("SHOW TABLES LIKE '{$wpdb->prefix}db_vek_subscriber_email'");
                 if ($db_mails == "{$wpdb->prefix}db_vek_subscriber_email"){
                     $email = sanitize_text_field($_POST['email']);
                     if(strlen($email) <= 50){
                         if(!is_email($email)){
-                            $mess = array('mess' => 'Не правельный Emailдрес','success'=> false);
+                            $mess = array('mess' => __('Неправильный E-mail адрес.','lang'),'success'=> false);
                         }else{
                             $db_mail = $wpdb->get_row($wpdb->prepare("SELECT id FROM {$wpdb->prefix}db_vek_subscriber_email WHERE email = %s", $email), ARRAY_A);
                             if(empty($db_mail)){
                                 $wpdb->insert($wpdb->prefix.'db_vek_subscriber_email', array('email' => $email,'dates' => date('Y-m-d H:i:s')), array('%s', '%s'));
-                                $mess = array('mess' => 'Вы подписались','success'=> true);
+                                $mess = array('mess' => __('Вы подписались.','lang'),'success'=> true);
                             }else{
-                                $mess = array('mess' => 'Вы подписанны','success'=> false);
+                                $mess = array('mess' => __('Вы подписаны.','lang'),'success'=> false);
                             }
                         }
                     }else{
-                        $mess = array('mess' => 'Превышен максимальное значение символов','success'=> false);
+                        $mess = array('mess' => __('Превышен максимальное значение символов.','lang'),'success'=> false);
                     }
                 }else{
-                    $mess = array('mess' => 'ошибка db','success'=> false);
+                    $mess = array('mess' => __('Ошибка базы mysql.','lang'),'success'=> false);
                 }
 
             }

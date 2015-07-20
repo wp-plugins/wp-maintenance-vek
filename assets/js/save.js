@@ -1,3 +1,7 @@
+/*!
+ * WP_Maintenance_vek Save Sett v0.2 (http://isvek.ru/wp-maintenance-vek)
+ * Copyright 2015 isvek.ru
+ */
 jQuery(document).ready(function($){
     $("#csv").click(function(){
         window.location.href = admin_save.ajaxurl+'?action=Wp_subscriber_email_csv';
