@@ -27,11 +27,11 @@ Plugin WP Maintenance-vek allows administrators to close the site for maintenanc
 <li>Edit text</li>
 <li>Use css styles</li>
 </ul>
-<br>
 <h3>Language support</h3>
+<ul>
 <li>English</li>
 <li>Russian</li>
-<br>
+</ul>
 <a href="http://isvek.ru/plug-ins/wp-maintenance-vek/documentation/" target="_blank">Documentation</a>
 <br>
 <a href="http://isvek.ru/plug-ins/wp-maintenance-vek/demo/" target="_blank">View demo</a>
